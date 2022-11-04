@@ -1,0 +1,1 @@
+dna_nucleotides = ["A", "T", "C", "G"]

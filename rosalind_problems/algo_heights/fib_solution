@@ -1,0 +1,17 @@
+def fib(n):
+    old = 1
+    new = 1
+    for i in range(n - 1):
+        temp_val = new
+        new = old
+        old = old + temp_val
+    return new
+
+def fib_loop(n): 
+    old, new = 1, 1
+    for i in range(n - 1):
+        new, old = old, old + new
+    return new
+
+
+print(fib_loop(5))

@@ -1,0 +1,37 @@
+import os
+path = os.path.dirname(__file__)
+
+def read_file(file_path):
+    with open(file_path, "r") as f:
+        return [line.strip() for line in f.readlines()]
+
+FASTA_file = read_file(path + "/gc_content.txt")
+FASTA_dict = {}
+FASTA_label = ""
+
+for line in FASTA_file:
+    if ">" in line:
+        FASTA_label = line
+        FASTA_dict[FASTA_label] = ""
+    else:
+        FASTA_dict[FASTA_label] += line
+
+def gc_content(seq):
+    return ((seq.count("G") + seq.count("C")) / len(seq) * 100)
+
+def highest_gc(dictio):
+    new_dict = {}
+    for key,value in dictio.items():
+        new_dict[key] = gc_content(value)
+    top = max(new_dict, key= new_dict.get)
+    return top[1:], new_dict[top]
+
+print(highest_gc(FASTA_dict))
+print()
+
+# Alternatively
+
+results_dict = {key: gc_content(value) for key, value in FASTA_dict.items()}
+max_key = max(results_dict, key= results_dict.get)
+print(f"{max_key[1:]}\n{results_dict[max_key]}")
+

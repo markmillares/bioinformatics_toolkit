@@ -1,4 +1,4 @@
-from bio_structures import *
+from bio_structures import DNA_Codons, dna_nucleotides
 from collections import Counter
 import random
 
@@ -54,3 +54,79 @@ class BioSeq():
     def gc_content(self):
         """GC-content of a sequence"""
         return ((self.seq.count("G") + self.seq.count("C")) / len(self.seq) * 100)
+
+    def gc_content_subsec(self, k= 20):
+        results = []
+        for i in range(0, len(self.seq) - k + 1, k):
+            subseq = self.seq[i:i + k]
+            results.append((subseq.count("G") + subseq.count("C")) / len(subseq) * 100)
+        return results
+
+    def translate_sequence(self, init_pos=0):
+        """Translates DNA sequence into amino acid"""
+        return [DNA_Codons[self.seq[pos: pos + 3]] for pos in range(init_pos, len(self.seq) - 2, 3)]
+
+    def codon_usage(self, amino_acid):
+        """Returns the frequency of each codon encoding a given amino acid in a DNA sequence"""
+        temp_list = []
+        for i in range(0, len(self.seq) - 2, 3):
+            if DNA_Codons[self.seq[i:i + 3]] == amino_acid:
+                temp_list.append(self.seq[i:i + 3])
+
+        freq_dict = dict(Counter(temp_list))
+        total_weight = sum(freq_dict.values())
+        for codon in freq_dict:
+            freq_dict[codon] = round(freq_dict[codon] / total_weight, 2)
+        return freq_dict
+
+    def reading_frames(self):
+        """Generate the six reading frames of a particular sequence"""
+        frames = []
+        frames.append(self.translate_sequence(init_pos=0))
+        frames.append(self.translate_sequence(init_pos=1))
+        frames.append(self.translate_sequence(init_pos=2))
+
+        temp_seq = BioSeq(self.dna_reverse_complement(), seq_type= self.seq_type, label= self.label)
+
+        frames.append(temp_seq.translate_sequence(init_pos=0))
+        frames.append(temp_seq.translate_sequence(init_pos=1))
+        frames.append(temp_seq.translate_sequence(init_pos=2))
+        del temp_seq
+        return frames
+    
+    @staticmethod
+    def proteins_from_reading_frame(reading_frame):
+        """Converts a reading frame into a protein or list of proteins if it contains more than one protein"""
+        current_protein = []
+        proteins = []
+
+        for amino_acid in reading_frame:
+            if amino_acid == "_":
+                if current_protein:
+                    for protein in current_protein:
+                        proteins.append(protein)
+                    current_protein = []
+            else:
+                if amino_acid == "M":
+                    current_protein.append("")
+                for i in range(len(current_protein)):
+                    current_protein[i] += amino_acid
+        return proteins
+
+    def proteins_from_all_orfs(self, start_reading_pos= 0, last_reading_pos= 0, ordered= False):
+        """Generate all RF, extract all proteins, returns a list of all proteins sorted or unsorted"""
+        if start_reading_pos < last_reading_pos:
+            temp_seq = BioSeq(self.seq[start_reading_pos : last_reading_pos], self.seq_type, self.label)
+            reading_frames = temp_seq.reading_frames()
+        else:
+            reading_frames = self.reading_frames()
+
+        results = []
+        for reading_frame in reading_frames:
+            proteins = self.proteins_from_reading_frame(reading_frame)
+            for protein in proteins:
+                results.append(protein)
+
+        if ordered:
+            return sorted(results, key= len, reverse= True)
+        return results

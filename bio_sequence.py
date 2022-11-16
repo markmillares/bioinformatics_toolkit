@@ -51,3 +51,6 @@ class BioSeq():
         mapping_table = str.maketrans("ATCG", "TAGC")
         return self.seq.translate(mapping_table)[::-1]
 
+    def gc_content(self):
+        """GC-content of a sequence"""
+        return ((self.seq.count("G") + self.seq.count("C")) / len(self.seq) * 100)

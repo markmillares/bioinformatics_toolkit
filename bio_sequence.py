@@ -1,4 +1,5 @@
 from bio_structures import *
+from collections import Counter
 import random
 
 class BioSeq():
@@ -17,6 +18,7 @@ class BioSeq():
 
     @classmethod
     def generate_random_seq(cls, length=50):
+        """Creates a random sequence for testing"""
         seq = "".join([random.choice(dna_nucleotides) for nucleotide in range(length)])
         return cls(sequence= seq, seq_type="DNA", label="Random Generated Sequence")
 
@@ -27,3 +29,7 @@ class BioSeq():
     def get_seq_info(self):
         """Returns full sequence information."""
         return f"[Label]: {self.label}\n[Sequence]: {self.seq}\n[Biotype]: {self.seq_type}\n[length]: {self.length}"
+
+    def count_nucleotide_frequency(self):
+        """Returns the frequency for each nucleotide in the sequence"""
+        return dict(Counter(self.seq))

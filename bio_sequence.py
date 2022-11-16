@@ -15,6 +15,11 @@ class BioSeq():
         """Check sequence to make sure it is a valid DNA string."""
         return set(dna_nucleotides).issuperset(self.seq)
 
+    @classmethod
+    def generate_random_seq(cls, length=50):
+        seq = "".join([random.choice(dna_nucleotides) for nucleotide in range(length)])
+        return cls(sequence= seq, seq_type="DNA", label="Random Generated Sequence")
+
     def get_seq_type(self):
         """Returns sequence type."""  
         return self.seq_type
@@ -22,7 +27,3 @@ class BioSeq():
     def get_seq_info(self):
         """Returns full sequence information."""
         return f"[Label]: {self.label}\n[Sequence]: {self.seq}\n[Biotype]: {self.seq_type}\n[length]: {self.length}"
-
-    def generate_random_seq(self, length=50, seq_type="DNA", label="Random Generated Sequence"):
-        seq = "".join([random.choice(dna_nucleotides) for nucleotide in range(length)])
-        self.__init__(seq, seq_type, label)

@@ -30,3 +30,10 @@ from bio_sequence import BioSeq
 #     print(protein)
 
 
+# test_dna = BioSeq("ATCGGGAAAATTTCCCC")
+
+# print(test_dna.get_seq_info())
+# print(test_dna.get_seq_type())
+
+test_dna_2 = BioSeq.generate_random_seq()
+print(test_dna_2.get_seq_info())

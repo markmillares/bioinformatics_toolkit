@@ -16,7 +16,7 @@ class BioSeq():
         return set(dna_nucleotides).issuperset(self.seq)
 
     def get_seq_type(self):
-        """Returns sequence type."""
+        """Returns sequence type."""  
         return self.seq_type
 
     def get_seq_info(self):

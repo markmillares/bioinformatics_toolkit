@@ -35,7 +35,19 @@ class BioSeq():
         return dict(Counter(self.seq))
 
     def transcribe_to_rna(self):
+        """DNA to RNA form, T replaced with U"""
         if self.seq_type == "DNA":
             return self.seq.replace("T", "U")
         else:
             return "Sequence type is already RNA."
+
+    def dna_complement(self):
+        """Returns the DNA pair strand for a given DNA sequence"""
+        mapping_table = str.maketrans("ATCG", "TAGC")
+        return self.seq.translate(mapping_table)
+
+    def dna_reverse_complement(self):
+        """Generates a reverse complement for a DNA sequence"""
+        mapping_table = str.maketrans("ATCG", "TAGC")
+        return self.seq.translate(mapping_table)[::-1]
+

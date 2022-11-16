@@ -37,4 +37,6 @@ from bio_sequence import BioSeq
 
 test_dna_2 = BioSeq.generate_random_seq()
 print(test_dna_2.get_seq_info())
-print(test_dna_2.count_nucleotide_frequency())
+print(test_dna_2.nucleotide_frequency())
+print(test_dna_2.transcribe_to_rna())
+print(test_dna_2.seq)

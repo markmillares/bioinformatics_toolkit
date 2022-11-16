@@ -30,6 +30,12 @@ class BioSeq():
         """Returns full sequence information."""
         return f"[Label]: {self.label}\n[Sequence]: {self.seq}\n[Biotype]: {self.seq_type}\n[length]: {self.length}"
 
-    def count_nucleotide_frequency(self):
+    def nucleotide_frequency(self):
         """Returns the frequency for each nucleotide in the sequence"""
         return dict(Counter(self.seq))
+
+    def transcribe_to_rna(self):
+        if self.seq_type == "DNA":
+            return self.seq.replace("T", "U")
+        else:
+            return "Sequence type is already RNA."
